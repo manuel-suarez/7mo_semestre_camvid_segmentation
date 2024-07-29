@@ -309,12 +309,12 @@ assert train_dataloader[0][1].shape == (BATCH_SIZE, 320, 320, n_classes)
 
 # define callbacks for learning rate scheduling and best checkpoints saving
 callbacks = [
-    keras.callbacks.ModelCheckpoint('./best_model.h5', save_weights_only=True, save_best_only=True, mode='min'),
+    keras.callbacks.ModelCheckpoint('./best_model.weights.h5', save_weights_only=True, save_best_only=True, mode='min'),
     keras.callbacks.ReduceLROnPlateau(),
 ]
 
 # train model
-history = model.fit_generator(
+history = model.fit(
     train_dataloader, 
     steps_per_epoch=len(train_dataloader), 
     epochs=EPOCHS, 
