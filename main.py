@@ -24,7 +24,7 @@ x_test_dir = os.path.join(DATA_DIR, 'test')
 y_test_dir = os.path.join(DATA_DIR, 'testannot')
 
 # helper function for data visualization
-def visualize(**images):
+def visualize(fname, **images):
     """PLot images in one row."""
     n = len(images)
     plt.figure(figsize=(16, 5))
@@ -34,7 +34,7 @@ def visualize(**images):
         plt.yticks([])
         plt.title(' '.join(name.split('_')).title())
         plt.imshow(image)
-    plt.show()
+    plt.savefig(fname)
     
 # helper function for data visualization    
 def denormalize(x):
@@ -160,6 +160,7 @@ dataset = Dataset(x_train_dir, y_train_dir, classes=['car', 'pedestrian'])
 
 image, mask = dataset[5] # get some sample
 visualize(
+    'figures/figure01.png',
     image=image, 
     cars_mask=mask[..., 0].squeeze(),
     sky_mask=mask[..., 1].squeeze(),
