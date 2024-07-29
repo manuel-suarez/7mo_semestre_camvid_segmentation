@@ -313,4 +313,14 @@ callbacks = [
     keras.callbacks.ReduceLROnPlateau(),
 ]
 
+# train model
+history = model.fit_generator(
+    train_dataloader, 
+    steps_per_epoch=len(train_dataloader), 
+    epochs=EPOCHS, 
+    callbacks=callbacks, 
+    validation_data=valid_dataloader, 
+    validation_steps=len(valid_dataloader),
+)
+
 print("Done!")
