@@ -179,16 +179,16 @@ def get_training_augmentation():
 
         A.ShiftScaleRotate(scale_limit=0.5, rotate_limit=0, shift_limit=0.1, p=1, border_mode=0),
 
-        A.PadIfNeeded(min_height=320, min_width=320, always_apply=True, border_mode=0),
+        A.PadIfNeeded(min_height=320, min_width=320, always_apply=True, border_mode=cv2.BORDER_CONSTANT, value=[0,0,0]),
         A.RandomCrop(height=320, width=320, always_apply=True),
 
-        A.IAAAdditiveGaussianNoise(p=0.2),
-        A.IAAPerspective(p=0.5),
+        # A.IAAAdditiveGaussianNoise(p=0.2),
+        # A.IAAPerspective(p=0.5),
 
         A.OneOf(
             [
                 A.CLAHE(p=1),
-                A.RandomBrightness(p=1),
+                # A.RandomBrightness(p=1),
                 A.RandomGamma(p=1),
             ],
             p=0.9,
@@ -196,7 +196,7 @@ def get_training_augmentation():
 
         A.OneOf(
             [
-                A.IAASharpen(p=1),
+                # A.IAASharpen(p=1),
                 A.Blur(blur_limit=3, p=1),
                 A.MotionBlur(blur_limit=3, p=1),
             ],
@@ -205,7 +205,7 @@ def get_training_augmentation():
 
         A.OneOf(
             [
-                A.RandomContrast(p=1),
+                # A.RandomContrast(p=1),
                 A.HueSaturationValue(p=1),
             ],
             p=0.9,
@@ -250,3 +250,4 @@ visualize(
     background_mask=mask[..., 2].squeeze(),
 )
 
+print("Done!")
