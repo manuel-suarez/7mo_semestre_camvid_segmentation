@@ -341,7 +341,7 @@ plt.title('Model loss')
 plt.ylabel('Loss')
 plt.xlabel('Epoch')
 plt.legend(['Train', 'Test'], loc='upper left')
-plt.savefig('figures/iou_scores.png')
+plt.savefig('figures/figure03.png')
 
 test_dataset = Dataset(
     x_test_dir, 
@@ -353,12 +353,29 @@ test_dataset = Dataset(
 
 test_dataloader = Dataloder(test_dataset, batch_size=1, shuffle=False)
 # load best weights
-model.load_weights('best_model.h5')
+model.load_weights('best_model.weights.h5')
 
 scores = model.evaluate_generator(test_dataloader)
 
 print("Loss: {:.5}".format(scores[0]))
 for metric, value in zip(metrics, scores[1:]):
     print("mean {}: {:.5}".format(metric.__name__, value))
+
+n = 5
+ids = np.random.choice(np.arange(len(test_dataset)), size=n)
+
+for i in ids:
+    
+    image, gt_mask = test_dataset[i]
+    image = np.expand_dims(image, axis=0)
+    pr_mask = model.predict(image)
+    
+    visualize(
+        'figures/figure04.png',
+        image=denormalize(image.squeeze()),
+        gt_mask=gt_mask.squeeze(),
+        pr_mask=pr_mask.squeeze(),
+    )
+
 
 print("Done!")
