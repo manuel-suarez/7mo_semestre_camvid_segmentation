@@ -250,4 +250,37 @@ visualize(
     background_mask=mask[..., 2].squeeze(),
 )
 
+import segmentation_models as sm
+BACKBONE = 'efficientnetb3'
+BATCH_SIZE = 8
+CLASSES = ['car']
+LR = 0.0001
+EPOCHS = 40
+
+preprocess_input = sm.get_preprocessing(BACKBONE)
+
+# define network parameters
+n_classes = 1 if len(CLASSES) == 1 else (len(CLASSES) + 1)  # case for binary and multiclass segmentation
+activation = 'sigmoid' if n_classes == 1 else 'softmax'
+
+#create model
+model = sm.Unet(BACKBONE, classes=n_classes, activation=activation)
+
+# define optomizer
+optim = keras.optimizers.Adam(LR)
+
+# Segmentation models losses can be combined together by '+' and scaled by integer or float factor
+dice_loss = sm.losses.DiceLoss()
+focal_loss = sm.losses.BinaryFocalLoss() if n_classes == 1 else sm.losses.CategoricalFocalLoss()
+total_loss = dice_loss + (1 * focal_loss)
+
+# actulally total_loss can be imported directly from library, above example just show you how to manipulate with losses
+# total_loss = sm.losses.binary_focal_dice_loss # or sm.losses.categorical_focal_dice_loss 
+
+metrics = [sm.metrics.IOUScore(threshold=0.5), sm.metrics.FScore(threshold=0.5)]
+
+# compile keras model with defined optimozer, loss and metrics
+model.compile(optim, total_loss, metrics)
+
+
 print("Done!")
