@@ -355,7 +355,7 @@ test_dataloader = Dataloder(test_dataset, batch_size=1, shuffle=False)
 # load best weights
 model.load_weights('best_model.weights.h5')
 
-scores = model.evaluate_generator(test_dataloader)
+scores = model.evaluate(test_dataloader)
 
 print("Loss: {:.5}".format(scores[0]))
 for metric, value in zip(metrics, scores[1:]):
